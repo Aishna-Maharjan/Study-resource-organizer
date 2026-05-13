@@ -1,17 +1,23 @@
 function Navbar() {
   return (
     <nav className="navbar">
-
-      <h2>Study Organizer</h2>
+      <div className="logo-area">
+        <h2>Study Organizer</h2>
+      </div>
 
       <ul className="nav-links">
         <li>Home</li>
         <li>Subjects</li>
-        <li>Favorites</li>
+        <li>Resources</li>
+        <li>About</li>
+        <li>Contact</li>
       </ul>
 
+      <button className="nav-btn">
+        Get Started
+      </button>
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

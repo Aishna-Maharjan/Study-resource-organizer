@@ -1,32 +1,43 @@
-function Hero() {
+import { useState } from "react";
+
+function Hero({ subjects, setSubjects }) {
+  const [subjectName, setSubjectName] = useState("");
+
+ function addSubject() {
+  if (!subjectName.trim()) return;
+
+  const newSubject = {
+    id: Date.now(),
+    name: subjectName.trim(),
+    resources: []
+  };
+
+  setSubjects([...subjects, newSubject]);
+  setSubjectName("");
+}
+
   return (
     <section className="hero">
-
       <div className="hero-text">
-        <h1>Hub for all things academia 📖</h1>
+        <h1>Hub for all things academia</h1>
 
         <p>
-          Simple Studies helps students
-          organize and manage study resources.
+          <b>Simple Studies</b> has hundreds of free resources to help you succeed in school.
         </p>
 
         <input
           type="text"
-          placeholder="Search resources..."
+          placeholder="Enter subject..."
+          value={subjectName}
+          onChange={(e) => setSubjectName(e.target.value)}
         />
 
-        <button>Search</button>
+        <button onClick={addSubject}>
+          Add Subject
+        </button>
       </div>
-
-      <div className="hero-image">
-        <img
-          src="https://via.placeholder.com/200"
-          alt="study"
-        />
-      </div>
-
     </section>
-  )
+  );
 }
 
-export default Hero
+export default Hero;
