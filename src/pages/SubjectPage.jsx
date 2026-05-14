@@ -7,8 +7,10 @@ import AddResource from "../component/AddResource";
 
 function SubjectPage({ subjects, setSubjects }) {
   const { id } = useParams();
+
   const [showModal, setShowModal] = useState(false);
   const [activeView, setActiveView] = useState("dashboard");
+  const [filterType, setFilterType] = useState("ALL");
 
   const subject = subjects.find((s) => s.id.toString() === id);
 
@@ -16,13 +18,12 @@ function SubjectPage({ subjects, setSubjects }) {
     return (
       <div>
         <Navbar />
-        <main className="not-found-page">
-          <h1>Subject not found</h1>
-        </main>
+        <h1>Subject not found</h1>
         <Footer />
       </div>
     );
   }
+
   const resources = subject.resources || [];
 
   const totalResources = resources.length;
@@ -33,87 +34,131 @@ function SubjectPage({ subjects, setSubjects }) {
 
   const favoriteResources = resources.filter((r) => r.favorite);
 
+  const filteredResources =
+    filterType === "ALL"
+      ? resources
+      : resources.filter((r) => r.type === filterType);
+
   return (
     <div className="subject-page-wrapper">
       <Navbar />
-
       <section className="subject-hero">
-        <div>
-          <p className="subject-label">YOUR SUBJECT</p>
-          <h1>{subject.name}</h1>
-          <p>
-            Organize your study resources, notes, and guides all in one place.
-          </p>
-        </div>
+        <h1>{subject.name}</h1>
+        <p>Organize your study resources in one place</p>
       </section>
 
       <section className="subject-dashboard">
-        <div className="dashboard-card">
+        <div
+          className="dashboard-card"
+          onClick={() => {
+            console.log("Total clicked"); // 🔥 debug
+            setActiveView("filtered");
+            setFilterType("ALL");
+          }}
+          style={{ cursor: "pointer" }}
+        >
           <div>
             <h2>Total Resources</h2>
             <p>{totalResources} resource(s) saved</p>
           </div>
-          <span>→</span>
-        </div>
 
+          <span style={{ pointerEvents: "none" }}>→</span>
+        </div>
         <div
           className="dashboard-card"
           onClick={() => setActiveView("recent")}
           style={{ cursor: "pointer" }}
         >
           <div>
-            <h2>Recently Added</h2>
-            
-            <p>{recentResources.length} recent resource(s)</p>
-          </div>
-          <span>→</span>
-          
-        </div>
-
+            {" "}
+            <h2>Recently Added</h2>{" "}
+            <p>{recentResources.length} recent resource(s)</p>{" "}
+          </div>{" "}
+          <span>→</span>{" "}
+        </div>{" "}
         <div className="dashboard-card">
+          {" "}
           <div>
-            <h2>Favorites</h2>
-            <p>{favoriteResources.length} favorite resource(s)</p>
-          </div>
-          <span>→</span>
-        </div>
-
+            {" "}
+            <h2>Favorites</h2>{" "}
+            <p>{favoriteResources.length} favorite resource(s)</p>{" "}
+          </div>{" "}
+          <span>→</span>{" "}
+        </div>{" "}
         <div className="dashboard-card add-resource-card">
+          {" "}
           <div>
-            <h2>Add Resources</h2>
-            <p>Upload PDFs, notes, links, and study guides</p>
-          </div>
-
-          <button onClick={() => setShowModal(true)}>Add</button>
+            {" "}
+            <h2>Add Resources</h2>{" "}
+            <p>Upload PDFs, notes, links, and study guides</p>{" "}
+          </div>{" "}
+          <button onClick={() => setShowModal(true)}>Add</button>{" "}
         </div>
       </section>
 
       {activeView === "recent" && (
-        <button
-          className="back-button"
-          onClick={() => setActiveView("dashboard")}
-        >
-          ← Back
-        </button>
-      )}
-      {activeView === "recent" && (
         <section className="resource-section">
-          <h2>Recently Added Resources</h2>
+          <button className="back-button" onClick={() => setActiveView("dashboard")}>← Back</button>
+
+          <h2>Recently Added</h2>
 
           {recentResources.length === 0 ? (
-            <p>No resources added yet.</p>
+            <p>No resources yet</p>
           ) : (
-            <div className="resource-list">
-              {recentResources.map((resource) => (
-                <div key={resource.id} className="resource-card">
-                  <h3>{resource.title}</h3>
-                  <p>
-                    <strong>Type:</strong> {resource.type}
-                  </p>
-                  <p>{resource.content}</p>
-                </div>
-              ))}
-            </div>
+            recentResources.map((r) => (
+              <div key={r.id} className="resource-card">
+                <h3>{r.title}</h3>
+                <p>{r.type}</p>
+
+                {r.type === "PDF" ? (
+                  <a href={r.fileUrl} target="_blank">
+                    Open PDF
+                  </a>
+                ) : (
+                  <p>{r.content}</p>
+                )}
+              </div>
+            ))
+          )}
+        </section>
+      )}
+      {activeView === "filtered" && (
+        <section className="resource-section">
+          <button className="back-button" onClick={() => setActiveView("dashboard")}>
+            ← Back
+          </button>
+
+          <h2>All Resources</h2>
+
+          <div className="filter-buttons">
+            {["ALL", "PDF", "Link", "DOC", "Notes", "Video"].map((type) => (
+              <button
+                key={type}
+                onClick={() => setFilterType(type)}
+                className={filterType === type ? "active" : ""}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+
+          {filteredResources.length === 0 ? (
+            <p>No resources found</p>
+          ) : (
+            filteredResources.map((r) => (
+              <div key={r.id} className="resource-card">
+                <h3>{r.title}</h3>
+                <p>{r.type}</p>
+
+                {r.type === "PDF" ? (
+                  <a href={r.fileUrl} target="_blank">
+                    Open PDF
+                  </a>
+                ) : (
+                  <p>{r.content}</p>
+                )}
+              </div>
+            ))
           )}
         </section>
       )}
