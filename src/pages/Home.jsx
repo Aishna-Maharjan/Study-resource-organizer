@@ -1,5 +1,3 @@
-// import { useState } from "react"
-
 import Navbar from "../component/Navbar";
 import Hero from "../component/Hero";
 import SubjectGrid from "../component/SubjectGrid";
@@ -12,12 +10,11 @@ function Home({ subjects, setSubjects }) {
     <div>
       <Navbar />
 
-      <Hero
-        subjects={subjects}
-        setSubjects={setSubjects}
-      />
+      <Hero subjects={subjects} setSubjects={setSubjects} />
 
-      <SubjectGrid subjects={subjects} />
+      <div id="subjects">
+        <SubjectGrid subjects={subjects} />
+      </div>
 
       <Footer />
     </div>

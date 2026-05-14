@@ -270,9 +270,34 @@ body{
 }
 
 /* NAVBAR */
+.navbar{
+  position: sticky;
+  top: 0;
+}
+
+html{
+  scroll-behavior: smooth;
+}
 
 .logo-area h2 {
   color: #2563eb;
+}
+
+.nav-links{
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.nav-links a{
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover{
+  color: blue;
 }
 
 .nav-btn {
@@ -471,33 +496,11 @@ body{
   transform: rotate(90deg);
 }
 
-/* Optional labels */
 .modal-box label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
   color: #334155;
-}
-
-/* Mobile */
-@media (max-width: 640px) {
-  .modal-box {
-    padding: 30px 22px;
-    border-radius: 18px;
-  }
-
-  .modal-box h2 {
-    font-size: 24px;
-  }
-
-  .modal-actions {
-    flex-direction: column;
-  }
-
-  .cancel-btn,
-  .save-btn {
-    width: 100%;
-  }
 }
 
 .resource-types {
@@ -539,8 +542,6 @@ body{
   font-family: inherit;
 }
 
-/* Add to style.css */
-
 .resource-section {
   padding: 0 60px 60px;
 }
@@ -577,19 +578,14 @@ body{
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   padding: 8px 12px;
   border-radius: 10px;
-
   background: #213e8c;
   color: #f2f5fd;
-
   border: 1px solid #e5e7eb;
   cursor: pointer;
-
   font-size: 14px;
   font-weight: 500;
-
   transition: all 0.2s ease;
 }
 
@@ -657,15 +653,70 @@ body{
 .add-resource-card {
   background: #2563eb;
   color: white;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
   gap: 12px;
 }
 
 .add-resource-card h2,
 .add-resource-card p {
   color: white !important;
+}
+
+.resource-page {
+  min-height: 100vh;
+  background-color: #f5f7fb;
+}
+
+/* search area in resource page */
+.resource-section input {
+  padding: 12px;
+  width: 250px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.search-btn {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.search-btn:hover {
+  background: #1e40af;
+}
+
+.resource-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+}
+
+.resource-card h3 {
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+.open-file {
+  display: inline-block;
+  margin-top: 10px;
+  color: #1e3a8a;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.open-file:hover {
+  text-decoration: underline;
 }
