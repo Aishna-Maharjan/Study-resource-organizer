@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import SubjectPage from "./pages/SubjectPage";
 import Resources from "./component/Resources";
+import About from "./component/About";
+import Contact from "./component/Contact";  
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -36,6 +38,10 @@ function App() {
           path="/resources"
           element={<Resources subjects={subjects} />}
         />
+
+         <Route path="/about" element={<About />} />
+
+         <Route path="/contact" element={<Contact />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
