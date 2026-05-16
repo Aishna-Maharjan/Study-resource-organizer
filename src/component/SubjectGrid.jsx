@@ -9,13 +9,12 @@ function SubjectGrid({ subjects = [] }) {
       </div>
 
       <div className="grid">
-        {subjects.map((item, index) => (
+        {subjects.map((item) => (
           <SubjectCard
             key={item.id}
             id={item.id}
             name={item.name}
             resourceCount={item.resources?.length || 0}
-            index={index}
           />
         ))}
 

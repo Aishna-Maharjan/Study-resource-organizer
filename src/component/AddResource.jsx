@@ -5,7 +5,7 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
   const [content, setContent] = useState("");
   const [type, setType] = useState("Link");
   const [file, setFile] = useState(null);
-  const [videoSource, setVideoSource] = useState("url"); // "url" or "file"
+  const [videoSource, setVideoSource] = useState("url");
 
   const fileInputRef = useRef(null);
 
@@ -25,18 +25,22 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
   }
 
   function handleSave() {
-    const needsFile = type === "PDF" || type === "DOC" || (type === "Video" && videoSource === "file");
-    const needsContent = !needsFile;
+    const isFileType =
+      type === "PDF" ||
+      type === "DOC" ||
+      (type === "Video" && videoSource === "file");
 
     if (!title.trim()) {
       alert("Please enter a title.");
       return;
     }
-    if (needsFile && !file) {
+
+    if (isFileType && !file) {
       alert(`Please upload a ${type} file.`);
       return;
     }
-    if (needsContent && !content.trim()) {
+
+    if (!isFileType && !content.trim()) {
       alert("Please fill in the content field.");
       return;
     }
@@ -47,13 +51,17 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
       type,
       favorite: false,
       createdAt: Date.now(),
-      content: needsFile ? file.name : content.trim(),
-      fileUrl: needsFile ? URL.createObjectURL(file) : null,
+
+      content: isFileType ? file.name : content.trim(),
+      fileUrl: isFileType ? URL.createObjectURL(file) : null,
     };
 
     const updatedSubjects = subjects.map((s) => {
       if (s.id === subject.id) {
-        return { ...s, resources: [...(s.resources || []), newResource] };
+        return {
+          ...s,
+          resources: [...(s.resources || []), newResource],
+        };
       }
       return s;
     });
@@ -67,14 +75,12 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
       case "PDF":
         return (
           <div className="pdf-upload">
-            <button
-              type="button"
-              className="upload-btn"
-              onClick={() => fileInputRef.current.click()}
-            >
+            <button type="button" className="upload-btn" onClick={() => fileInputRef.current.click()}>
               📄 Upload PDF
             </button>
+
             {file && <p className="file-name">📄 {file.name}</p>}
+
             <input
               ref={fileInputRef}
               type="file"
@@ -88,18 +94,16 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
       case "DOC":
         return (
           <div className="pdf-upload">
-            <button
-              type="button"
-              className="upload-btn"
-              onClick={() => fileInputRef.current.click()}
-            >
+            <button type="button" className="upload-btn" onClick={() => fileInputRef.current.click()}>
               📝 Upload Document
             </button>
+
             {file && <p className="file-name">📝 {file.name}</p>}
+
             <input
               ref={fileInputRef}
               type="file"
-              accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              accept=".doc,.docx"
               style={{ display: "none" }}
               onChange={handleFileChange}
             />
@@ -123,24 +127,33 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
         return (
           <>
             <label>Video Source</label>
+
             <div className="resource-types" style={{ marginBottom: "12px" }}>
               <label className={`type-pill ${videoSource === "url" ? "active" : ""}`}>
                 <input
                   type="radio"
                   value="url"
                   checked={videoSource === "url"}
-                  onChange={() => { setVideoSource("url"); setFile(null); setContent(""); }}
+                  onChange={() => {
+                    setVideoSource("url");
+                    setFile(null);
+                    setContent("");
+                  }}
                 />
                 Paste URL
               </label>
+
               <label className={`type-pill ${videoSource === "file" ? "active" : ""}`}>
                 <input
                   type="radio"
                   value="file"
                   checked={videoSource === "file"}
-                  onChange={() => { setVideoSource("file"); setContent(""); }}
+                  onChange={() => {
+                    setVideoSource("file");
+                    setContent("");
+                  }}
                 />
-                Upload from Computer
+                Upload File
               </label>
             </div>
 
@@ -151,7 +164,7 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
                   type="url"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="https://youtube.com/watch?v=..."
+                  placeholder="https://youtube.com/..."
                 />
               </>
             ) : (
@@ -163,7 +176,9 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
                 >
                   🎬 Upload Video
                 </button>
+
                 {file && <p className="file-name">🎬 {file.name}</p>}
+
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -211,6 +226,7 @@ function AddResource({ subject, subjects, setSubjects, onClose }) {
         />
 
         <label>Resource Type</label>
+
         <div className="resource-types">
           {["PDF", "Link", "DOC", "Notes", "Video"].map((item) => (
             <label
