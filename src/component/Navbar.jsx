@@ -4,44 +4,31 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // subject
-  function goToSubjects() {
-    if (location.pathname === "/") {
-      const section = document.getElementById("subjects");
-
-      section?.scrollIntoView({
-        behavior: "smooth",
-      });
-    } else {
-      navigate("/");
-
+  function scrollAndFocus(id, focusId) {
+    const section = document.getElementById(id);
+    section?.scrollIntoView({ behavior: "smooth" });
+    if (focusId) {
       setTimeout(() => {
-        const section = document.getElementById("subjects");
-
-        section?.scrollIntoView({
-          behavior: "smooth",
-        });
-      }, 100);
+        document.getElementById(focusId)?.focus();
+      }, 400);
     }
   }
-// resources
-  function goToResources() {
-    if (location.pathname === "/") {
-      const section = document.getElementById("resources");
 
-      section?.scrollIntoView({
-        behavior: "smooth",
-      });
+  function goToSubjects() {
+    if (location.pathname === "/") {
+      scrollAndFocus("subjects");
     } else {
       navigate("/");
+      setTimeout(() => scrollAndFocus("subjects"), 100);
+    }
+  }
 
-      setTimeout(() => {
-        const section = document.getElementById("resources");
-
-        section?.scrollIntoView({
-          behavior: "smooth",
-        });
-      }, 100);
+  function goToGetStarted() {
+    if (location.pathname === "/") {
+      scrollAndFocus("hero", "subject-input");
+    } else {
+      navigate("/");
+      setTimeout(() => scrollAndFocus("hero", "subject-input"), 100);
     }
   }
 
@@ -75,9 +62,9 @@ function Navbar() {
         </li>
       </ul>
 
-      <Link to="/get-started" className="nav-btn">
+      <button onClick={goToGetStarted} className="nav-btn">
         Get Started
-      </Link>
+      </button>
     </nav>
   );
 }

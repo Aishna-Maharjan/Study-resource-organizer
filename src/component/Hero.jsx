@@ -3,38 +3,43 @@ import { useState } from "react";
 function Hero({ subjects, setSubjects }) {
   const [subjectName, setSubjectName] = useState("");
 
- function addSubject() {
-  if (!subjectName.trim()) return;
+  function addSubject() {
+    if (!subjectName.trim()) return;
 
-  const newSubject = {
-    id: Date.now(),
-    name: subjectName.trim(),
-    resources: []
-  };
+    const newSubject = {
+      id: Date.now(),
+      name: subjectName.trim(),
+      resources: [],
+    };
 
-  setSubjects([...subjects, newSubject]);
-  setSubjectName("");
-}
+    setSubjects([...subjects, newSubject]);
+    setSubjectName("");
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") addSubject();
+  }
 
   return (
-    <section className="hero">
+    <section className="hero" id="hero">
       <div className="hero-text">
-        <h1>Hub for all things academia</h1>
-
+        <span className="hero-badge">✦ Your personal study space</span>
+        <h1>Keep your study life in one place</h1>
         <p>
-          <b>Simple Studies</b> has hundreds of free resources to help you succeed in school.
+          Add subjects, drop in notes, links, PDFs and videos —
+          all organized the way you think.
         </p>
-
-        <input
-          type="text"
-          placeholder="Enter subject..."
-          value={subjectName}
-          onChange={(e) => setSubjectName(e.target.value)}
-        />
-
-        <button onClick={addSubject}>
-          Add Subject
-        </button>
+        <div className="hero-input-row">
+          <input
+            id="subject-input"
+            type="text"
+            placeholder="What are you studying? e.g. Biology"
+            value={subjectName}
+            onChange={(e) => setSubjectName(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button onClick={addSubject}>+ Add</button>
+        </div>
       </div>
     </section>
   );
